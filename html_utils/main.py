@@ -1,6 +1,6 @@
 
-from .utils import get_title, get_favicon_url, get_first_h1_in_body, get_meta_name
-from .scraping import do_get_request, get_soup_for_html
+from utils import get_title, get_favicon_url, get_first_h1_in_body, get_meta_name
+from scraping import do_get_request, get_soup_for_html
 
 import uvicorn
 from fastapi import FastAPI, status
