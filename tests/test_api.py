@@ -1,10 +1,13 @@
 from html_utils import main, utils, scraping
+from fastapi.testclient import TestClient
 
 def get_mocked_payload(): 
     with open("tests/html_snapshots/pydantic.html") as f:
         content = f.read()
     return content
 
+
+client = TestClient(main.app)
 # create a test class
 class TestHtmlBaseInfo:
 
@@ -25,11 +28,9 @@ class TestHtmlBaseInfo:
         Test the html_get_base_info function with a pre defined html payload
         """
         monkeypatch.setattr(scraping, "do_get_request", lambda url: get_mocked_payload())
-
-        url = "https://pydantic-docs.helpmanual.io/usage/models/"
-        html_info = main.get_html_base_info(url)
-
-        assert '../../favicon.png' == html_info.faviconUrl
-        assert 'Models' in html_info.title
-        assert 'Data validation' in html_info.metaName
-        assert 'Models' == html_info.firstH1
+        html_info = client.get("/v1/get-html-base-info?url=https://pydantic-docs.helpmanual.io/usage/models/")
+        html_info = html_info.json()
+        assert '../../favicon.png' == html_info.get('faviconUrl')
+        assert 'Models' in html_info.get('title')
+        assert 'Data validation' in html_info.get('metaName')
+        assert 'Models' == html_info.get('firstH1')
