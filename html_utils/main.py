@@ -1,3 +1,4 @@
+from typing import Optional
 
 from utils import get_title, get_favicon_url, get_first_h1_in_body, get_meta_name
 from scraping import do_get_request, get_soup_for_html
@@ -11,10 +12,10 @@ app = FastAPI()
 # models
 
 class HTMLBaseInfo(BaseModel):
-    title: str | None
-    metaName: str | None
-    faviconUrl: str | None
-    firstH1: str | None
+    title: Optional[str]
+    metaName: Optional[str]
+    faviconUrl: Optional[str]
+    firstH1: Optional[str]
 
 # routes
 
