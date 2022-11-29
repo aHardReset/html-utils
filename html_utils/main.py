@@ -1,15 +1,23 @@
 from typing import Optional
 
-from utils import get_title, get_favicon_url, get_first_h1_in_body, get_meta_name
-from scraping import do_get_request, get_soup_for_html
+from utils import (
+    get_title,
+    get_favicon_url,
+    get_first_h1_in_body,
+    get_meta_name,
+    get_web_page_content
+)
 
 import uvicorn
 from fastapi import FastAPI, status
 from pydantic import BaseModel, HttpUrl
+from bs4 import BeautifulSoup
 
 app = FastAPI()
+HTML_PARSER = "html.parser"
 
 # models
+
 
 class HTMLBaseInfo(BaseModel):
     title: Optional[str]
@@ -19,17 +27,20 @@ class HTMLBaseInfo(BaseModel):
 
 # routes
 
+
 @app.get(
     path="/v1/get-html-base-info",
-    summary="Get HTML base info that includes title, meta name, favicon url and first h1",
-    description="Get HTML base info that includes title, meta name, favicon url and first h1",
+    summary="""Get HTML base info that includes title,
+        meta name, favicon url and first h1""",
+    description="""Get HTML base info that includes title,
+        meta name, favicon url and first h1""",
     tags=["html", "scraping"],
     status_code=status.HTTP_200_OK,
     response_model=HTMLBaseInfo,
 )
 def get_html_base_info(url: HttpUrl):
-    response = do_get_request(url)
-    soup = get_soup_for_html(response.content)
+    content = get_web_page_content(url)
+    soup = BeautifulSoup(content, HTML_PARSER)
     new_base_info = HTMLBaseInfo(
         title=get_title(soup),
         metaName=get_meta_name(soup),
@@ -37,6 +48,7 @@ def get_html_base_info(url: HttpUrl):
         firstH1=get_first_h1_in_body(soup),
     )
     return new_base_info
+
 
 if __name__ == "__main__":
     uvicorn.run(app, host="0.0.0.0", port=8000)
