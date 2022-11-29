@@ -1,13 +1,18 @@
-from html_utils import main, utils, scraping
-from fastapi.testclient import TestClient
+from html_utils import main, utils
 
-def get_mocked_payload(): 
+from fastapi.testclient import TestClient
+from bs4 import BeautifulSoup
+
+
+def get_mocked_payload():
     with open("tests/html_snapshots/pydantic.html") as f:
         content = f.read()
     return content
 
 
 client = TestClient(main.app)
+
+
 # create a test class
 class TestHtmlBaseInfo:
 
@@ -15,8 +20,8 @@ class TestHtmlBaseInfo:
         """
         Test the functions in utils.py with a pre defined html payload
         """
-        
-        soup = scraping.get_soup_for_html(get_mocked_payload())
+
+        soup = soup = BeautifulSoup(get_mocked_payload(), main.HTML_PARSER)
 
         assert '../../favicon.png' == utils.get_favicon_url(soup)
         assert 'Models' in utils.get_title(soup)
@@ -27,8 +32,14 @@ class TestHtmlBaseInfo:
         """
         Test the html_get_base_info function with a pre defined html payload
         """
-        monkeypatch.setattr(scraping, "do_get_request", lambda url: get_mocked_payload())
-        html_info = client.get("/v1/get-html-base-info?url=https://pydantic-docs.helpmanual.io/usage/models/")
+        monkeypatch.setattr(
+            utils,
+            "get_web_page_content",
+            lambda url: get_mocked_payload()
+        )
+        html_info = client.get(
+            "/v1/get-html-base-info?url=https://pydantic-docs.helpmanual.io/usage/models/"
+        )
         html_info = html_info.json()
         assert '../../favicon.png' == html_info.get('faviconUrl')
         assert 'Models' in html_info.get('title')
