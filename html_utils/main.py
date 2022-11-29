@@ -39,6 +39,16 @@ class HTMLBaseInfo(BaseModel):
     response_model=HTMLBaseInfo,
 )
 def get_html_base_info(url: HttpUrl):
+    """Get HTML base info from a web page that includes
+    title, meta name, favicon url and first h1
+
+    Args:
+        url (HttpUrl): the url of the web page
+
+    Returns:
+        HTMLBaseInfo: the base info of the web page
+    """
+
     content = get_web_page_content(url)
     soup = BeautifulSoup(content, HTML_PARSER)
     new_base_info = HTMLBaseInfo(
