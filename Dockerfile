@@ -1,4 +1,4 @@
-FROM tiangolo/uvicorn-gunicorn:python3.9
+FROM tiangolo/uvicorn-gunicorn:python3.9-slim
 
 LABEL maintainer = "Aaron Garibay <aaron.contreras@unosquare.com>"
 
