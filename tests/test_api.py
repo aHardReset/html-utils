@@ -32,14 +32,16 @@ class TestHtmlBaseInfo:
         """
         Test the html_get_base_info function with a pre defined html payload
         """
+        api_request_url = (
+            "/v1/get-html-base-info?"
+            + "url=https://pydantic-docs.helpmanual.io/usage/models/"
+        )
         monkeypatch.setattr(
             utils,
             "get_web_page_content",
             lambda url: get_mocked_payload()
         )
-        html_info = client.get(
-            "/v1/get-html-base-info?url=https://pydantic-docs.helpmanual.io/usage/models/"
-        )
+        html_info = client.get(api_request_url)
         html_info = html_info.json()
         assert '../../favicon.png' == html_info.get('faviconUrl')
         assert 'Models' in html_info.get('title')

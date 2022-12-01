@@ -20,14 +20,13 @@ def get_title(soup: BeautifulSoup) -> str or None:
 def get_meta_name(soup: BeautifulSoup) -> str or None:
     """ search the meta tag of a web page and returns the content of the
     name attribute
-    
+
     Args:
         soup (BeautifulSoup): the soup object of the web page
 
     Returns:
         str or None: the content of the name attribute or None if not found
     """
-
 
     meta_name = soup.find("meta", {"name": "description"}) or {}
     return meta_name.get("content", None)
@@ -43,7 +42,6 @@ def get_favicon_url(soup: BeautifulSoup):
         str or None: the favicon url of the web page or None if not found
     """
 
-
     favicon_url = soup.find("link", {"rel": "icon"}) or {}
     return favicon_url.get("href", None)
 
@@ -55,7 +53,8 @@ def get_first_h1_in_body(soup: BeautifulSoup):
         soup (BeautifulSoup): the soup object of the web page
 
     Returns:
-        str or None: the first h1 in the body of the web page or None if not found
+        str or None: the first h1 in the body of the web page
+        or None if not found
     """
     first_h1 = soup.find("body").find("h1")
     if not first_h1:
