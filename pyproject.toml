@@ -1,0 +1,19 @@
+[tool.poetry]
+name = "html-utils"
+version = "0.3.0"
+description = "Get rich data from web pages"
+authors = ["Aaron Garibay <aaron.contreras@unosquare.com>"]
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "^3.9"
+fastapi = "^0.87.0"
+requests = "^2.28.0"
+beautifulsoup4 = "^4.11.0"
+
+[tool.poetry.group.dev.dependencies]
+pytest = "^7.2.0"
+
+[build-system]
+requires = ["poetry>=1.2.2"]
+build-backend = "poetry.masonry.api"
