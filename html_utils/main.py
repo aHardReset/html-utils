@@ -8,7 +8,6 @@ from utils import (
     get_web_page_content
 )
 
-import uvicorn
 from fastapi import FastAPI, status
 from pydantic import BaseModel, HttpUrl
 from bs4 import BeautifulSoup
@@ -58,7 +57,3 @@ def get_html_base_info(url: HttpUrl):
         firstH1=get_first_h1_in_body(soup),
     )
     return new_base_info
-
-
-if __name__ == "__main__":
-    uvicorn.run(app, host="0.0.0.0", port=8000)
