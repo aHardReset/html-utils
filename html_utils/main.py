@@ -4,13 +4,13 @@ from utils import (
     get_title,
     get_favicon_url,
     get_first_h1_in_body,
-    get_meta_name,
-    get_web_page_content
+    get_meta_name
 )
 
 from fastapi import FastAPI, status
 from pydantic import BaseModel, HttpUrl
 from bs4 import BeautifulSoup
+import requests
 
 app = FastAPI()
 HTML_PARSER = "html.parser"
@@ -48,7 +48,7 @@ def get_html_base_info(url: HttpUrl):
         HTMLBaseInfo: the base info of the web page
     """
 
-    content = get_web_page_content(url)
+    content = requests.get(url).content
     soup = BeautifulSoup(content, HTML_PARSER)
     new_base_info = HTMLBaseInfo(
         title=get_title(soup),

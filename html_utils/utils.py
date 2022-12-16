@@ -1,5 +1,4 @@
 from bs4 import BeautifulSoup
-import requests
 
 
 def get_title(soup: BeautifulSoup) -> str or None:
@@ -32,7 +31,7 @@ def get_meta_name(soup: BeautifulSoup) -> str or None:
     return meta_name.get("content", None)
 
 
-def get_favicon_url(soup: BeautifulSoup):
+def get_favicon_url(soup: BeautifulSoup) -> str or None:
     """ search the favicon url of a web page
 
     Args:
@@ -46,7 +45,7 @@ def get_favicon_url(soup: BeautifulSoup):
     return favicon_url.get("href", None)
 
 
-def get_first_h1_in_body(soup: BeautifulSoup):
+def get_first_h1_in_body(soup: BeautifulSoup) -> str or None:
     """ search the first h1 in the body of a web page
 
     Args:
@@ -60,17 +59,3 @@ def get_first_h1_in_body(soup: BeautifulSoup):
     if not first_h1:
         return None
     return first_h1.string
-
-
-def get_web_page_content(url: str) -> str:
-    """ Given a url, do a get request and return the
-    response content compatible with BeautifulSoup
-
-    Args:
-        url (str): the url of the web page
-
-    Returns:
-        str: the response content of the web page
-    """
-    response = requests.get(url)
-    return response.content
