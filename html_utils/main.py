@@ -1,16 +1,15 @@
 from typing import Optional
 
-from utils import (
-    get_title,
-    get_favicon_url,
-    get_first_h1_in_body,
-    get_meta_name
-)
-
-from fastapi import FastAPI, status
-from pydantic import BaseModel, HttpUrl
-from bs4 import BeautifulSoup
 import requests
+from bs4 import BeautifulSoup
+from fastapi import FastAPI
+from fastapi import status
+from pydantic import BaseModel
+from pydantic import HttpUrl
+from utils import get_favicon_url
+from utils import get_first_h1_in_body
+from utils import get_meta_name
+from utils import get_title
 
 app = FastAPI()
 HTML_PARSER = "html.parser"
@@ -23,6 +22,7 @@ class HTMLBaseInfo(BaseModel):
     metaName: Optional[str]
     faviconUrl: Optional[str]
     firstH1: Optional[str]
+
 
 # routes
 

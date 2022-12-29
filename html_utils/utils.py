@@ -1,8 +1,9 @@
 from bs4 import BeautifulSoup
+from bs4 import element
 
 
-def get_title(soup: BeautifulSoup) -> str or None:
-    """ search the title tag of a web page
+def get_title(soup: BeautifulSoup) -> (None | str):
+    """search the title tag of a web page
 
     Args:
         soup (BeautifulSoup): the soup object of the web page
@@ -11,13 +12,13 @@ def get_title(soup: BeautifulSoup) -> str or None:
         str or None: the title of the web page or None if not found
     """
     title = soup.find("title")
-    if not title:
-        return None
-    return title.string
+    if type(title) is element.Tag:
+        return title.string
+    return None
 
 
-def get_meta_name(soup: BeautifulSoup) -> str or None:
-    """ search the meta tag of a web page and returns the content of the
+def get_meta_name(soup: BeautifulSoup) -> (str | None):
+    """search the meta tag of a web page and returns the content of the
     name attribute
 
     Args:
@@ -28,11 +29,15 @@ def get_meta_name(soup: BeautifulSoup) -> str or None:
     """
 
     meta_name = soup.find("meta", {"name": "description"}) or {}
-    return meta_name.get("content", None)
+    if type(meta_name) is element.Tag:
+        content = meta_name.get("content", None)
+        if content:
+            return str(content)
+    return None
 
 
-def get_favicon_url(soup: BeautifulSoup) -> str or None:
-    """ search the favicon url of a web page
+def get_favicon_url(soup: BeautifulSoup) -> (str | None):
+    """search the favicon url of a web page
 
     Args:
         soup (BeautifulSoup): the soup object of the web page
@@ -41,12 +46,16 @@ def get_favicon_url(soup: BeautifulSoup) -> str or None:
         str or None: the favicon url of the web page or None if not found
     """
 
-    favicon_url = soup.find("link", {"rel": "icon"}) or {}
-    return favicon_url.get("href", None)
+    favicon = soup.find("link", {"rel": "icon"}) or {}
+    if type(favicon) is element.Tag:
+        favicon_url = favicon.get("href", None)
+        if favicon_url:
+            return str(favicon_url)
+    return None
 
 
-def get_first_h1_in_body(soup: BeautifulSoup) -> str or None:
-    """ search the first h1 in the body of a web page
+def get_first_h1_in_body(soup: BeautifulSoup) -> (str | None):
+    """search the first h1 in the body of a web page
 
     Args:
         soup (BeautifulSoup): the soup object of the web page
@@ -55,7 +64,10 @@ def get_first_h1_in_body(soup: BeautifulSoup) -> str or None:
         str or None: the first h1 in the body of the web page
         or None if not found
     """
-    first_h1 = soup.find("body").find("h1")
-    if not first_h1:
-        return None
-    return first_h1.string
+    body = soup.find("body")
+    if type(body) is element.Tag:
+        h1 = body.find("h1")
+
+        if type(h1) is element.Tag:
+            return h1.string
+    return None
